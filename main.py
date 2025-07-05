@@ -20,7 +20,7 @@ def main():
 
     file_path = "data/output"
     file_nam = 1
-    while os.path.isfile(file_path + str(file_nam) + ".mp4"):
+    while os.path.isfile(file_path + f"{str(file_nam)}.mp4"):
         file_nam+= 1
     file_path+= str(file_nam) + ".mp4"
 
