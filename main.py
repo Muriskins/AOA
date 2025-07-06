@@ -1,6 +1,7 @@
 import cv2
 import sys
 import os
+import mediapipe as mp
 
 def main():
     source = select_source()
@@ -10,11 +11,18 @@ def main():
         print(f"Ошибка: не удалось открыть источник {source}")
         return
 
+    mp_pose = mp.solutions.pose
+    pose = mp_pose.Pose(
+        min_detection_confidence=0.5,
+        min_tracking_confidence=0.5,
+        model_complexity= 1  # 0=легкий, 1=средний, 2=тяжелый
+    )
+    mp_drawing = mp.solutions.drawing_utils
+    mp_drawing_styles = mp.solutions.drawing_styles
+
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    if fps <= 0:
-        fps = 30.0
+    fps = cap.get(cv2.CAP_PROP_FPS) or 30.0
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
@@ -31,13 +39,28 @@ def main():
     try:
         while True:
             ret, frame = cap.read()
+
             if not ret:
                 break
 
-            # обработка кадра будет здесь>
-            processed_frame = frame
+            # Конвертация цвета для MediaPipe (BGR -> RGB)
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-            out.write(processed_frame)
+            # Обработка позы
+            results = pose.process(rgb_frame)
+
+            # Копия кадра для рисования
+            processed_frame = frame.copy()
+
+            # Рисование скелета
+            if results.pose_landmarks:
+                # Рисование точек и соединений
+                mp_drawing.draw_landmarks(
+                    processed_frame,
+                    results.pose_landmarks,
+                    mp_pose.POSE_CONNECTIONS,
+                    landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style()
+                )
 
             cv2.imshow('Video Processing', processed_frame)
 
