@@ -18,7 +18,7 @@ def main():
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-    file_path = "data/output"
+    file_path = "out_data/output"
     file_nam = 1
     while os.path.isfile(file_path + str(file_nam) + ".mp4"):
         file_nam+= 1
