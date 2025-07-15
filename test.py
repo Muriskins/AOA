@@ -9,7 +9,7 @@ def main():
     source = select_source()
 
     # Загрузка модели YOLOv11
-    model = YOLO("yolov8n-pose.pt")
+    model = YOLO("yolo11n-pose.pt")
 
     # Открытие видео файла
     cap = cv2.VideoCapture(source)
