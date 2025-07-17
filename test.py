@@ -8,8 +8,8 @@ from ultralytics import YOLO
 def main():
     source = select_source()
 
-    # Загрузка модели YOLOv11
-    model = YOLO("yolo11n-pose.pt")
+    # Загрузка модели YOLOv8
+    model = YOLO("yolov8n-pose.pt")
 
     # Открытие видео файла
     cap = cv2.VideoCapture(source)
@@ -50,7 +50,7 @@ def main():
             print("Конец видео")
             break
 
-        # Применение YOLOv11 для отслеживания объектов на кадре, с сохранением треков между кадрами
+        # Применение YOLOv8 для отслеживания объектов на кадре, с сохранением треков между кадрами
         results = model.track(frame, persist=True)
 
         # Проверка на наличие объектов
