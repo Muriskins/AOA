@@ -4,6 +4,7 @@ import os
 
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0' # Отключить oneDNN-оптимизаций
 
+
 import keras
 
 import numpy as np
